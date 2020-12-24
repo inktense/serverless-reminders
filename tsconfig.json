@@ -1,0 +1,61 @@
+// {
+//   "compilerOptions": {
+//     "lib": [
+//       "es2017"
+//     ],
+//     "removeComments": true,
+//     "moduleResolution": "node",
+//     "noUnusedLocals": true,
+//     "resolveJsonModule": true,
+//     "module": "commonjs",
+//     "noUnusedParameters": true,
+//     "sourceMap": true,
+//    // "target": "es2017",
+//     "outDir": ".build",
+//     "rootDir": "./",
+//     "preserveConstEnums": true,
+//     "strictNullChecks": true,
+//     "allowJs": true,
+//     "target": "es5",
+//     "typeRoots": [
+//       "./node_modules/@types"
+//     ]
+//   },
+//   "include": [
+//     "./src/**/*.ts"
+//   ],
+//   "exclude": [
+//     "node_modules/**/*",
+//     ".serverless/**/*",
+//    // ".webpack/**/*",
+//     "_warmup/**/*",
+//     ".vscode/**/*",
+//   ]
+// }
+
+{
+  "compilerOptions": {
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "strictNullChecks": true,
+    "inlineSources": true,
+    "inlineSourceMap": true,
+    "sourceRoot": "/",
+    "target": "es2017",
+    "outDir": ".build",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "lib": ["es2017"],
+    "rootDir": "./src",
+    "resolveJsonModule": true
+  },
+  "include": ["./**/*.ts"],
+  "exclude": [
+    "node_modules/**/*",
+    ".serverless/**/*",
+    ".webpack/**/*",
+    "_warmup/**/*",
+    ".vscode/**/*"
+  ]
+}
