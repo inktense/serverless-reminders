@@ -6,7 +6,9 @@ provider:
   runtime: nodejs12.x
   profile: serverless-admin
   environment:
-    emailAddress: ${env:EMAIL_ADDRESS}
+    sourceEmailAddress: ${env:SOURCE_EMAIL_ADDRESS}
+    destinationEmailAddress: ${env:DESTINATION_EMAIL_ADDRESS}
+    api_key: ${env:API_KEY}
   iamRoleStatements:
     -  Effect: "Allow"
        Action:

@@ -1,0 +1,36 @@
+$bgcolor: #373737;
+$textcolor: #464646;
+$fontsize: 18px;
+$white: #FFF;
+
+body {
+  //background-color: $bgcolor;
+  color: $textcolor;
+  font-size: $fontsize;
+}
+
+.panel-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: auto;
+}
+
+.panel-image {
+    flex: 2;
+}
+
+.panel-description {
+    flex: 2;
+    background-color: $bgcolor;
+    color: $textcolor;
+}
+
+.title {
+    color: $white;
+}
+
+p {
+    color: orange;
+  }
+

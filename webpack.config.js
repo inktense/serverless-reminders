@@ -10,25 +10,19 @@ module.exports = {
   entry: slsw.lib.entries,
   devtool: slsw.lib.webpack.isLocal ? 'eval-cheap-module-source-map' : 'source-map',
   resolve: {
-    extensions: ['.mjs', '.json', '.ts'],
+    extensions: ['.mjs', '.json', '.ts', '.css'],
     symlinks: false,
     cacheWithContext: false,
-    //root: path.resolve(__dirname, 'src'),
-   // modules: ["src", "node_modules"] 
   },
   output: {
     libraryTarget: 'commonjs',
     path: path.join(__dirname, '.webpack'),
     filename: '[name].js',
   },
-  // optimization: {
-  //   concatenateModules: false,
-  // },
   target: 'node',
   externals: [nodeExternals()],
   module: {
     rules: [
-      // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
       {
         test: /\.(tsx?)$/,
         loader: 'ts-loader',
@@ -44,22 +38,27 @@ module.exports = {
           experimentalWatchApi: true,
         },
       },
+      {
+        test: /\.html$/i,
+        loader: 'html-loader',
+      },
+      {
+        test: /\.css?$/,
+        loader: 'css-loader',
+       // include: __dirname
+      }
     ],
   },
   plugins: [
-    new CopyPlugin({
-      patterns: [
-        {
-          from: 'src/templates/*.html',
-          // to: 'src/templates',
-        },
-      ],
-    }),
-  //  new ForkTsCheckerWebpackPlugin({
-      // eslint: true,
-      // eslintOptions: {
-      //   cache: true
-      // }
-  //  })
+    // new CopyPlugin({
+    //   patterns: [
+    //     {
+    //       from: 'src/templates/*.html',
+    //     },
+    //     {
+    //       from: 'src/resources/css/*.css',
+    //     },
+    //   ],
+    // }),
   ],
 };

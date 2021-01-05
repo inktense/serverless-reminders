@@ -1,23 +1,29 @@
- import * as fs from 'fs';
  import * as path from 'path';
+ import axios from "axios";
+ import ejs from 'ejs';
  import { SES, AWSError } from 'aws-sdk';
  import { SendEmailRequest, SendEmailResponse } from 'aws-sdk/clients/ses';
+ import { APODDto } from '../common/interfaces/APOD';
+ import * as css from '../resources/css/template.css';
+ import * as html from '../templates/dailyReminder.html'
+console.log('htmlsss', html)
+ function generateEmailParams(APODData: APODDto | string): SendEmailRequest {
+    const sourceEmailAddress: string | undefined = process.env.sourceEmailAddress;
+    const destinationEmailAddress: string| undefined = process.env.destinationEmailAddress;
+console.log('csss', css.toString())
+   // let template = '';
+   const template =  ejs.render(html.default, APODData);
+     //   template = str
+   // });
 
-
- function generateEmailParams(): SendEmailRequest {
-    const emailHtml = fs.readFileSync(path.resolve(__dirname, '../templates/dailyReminder.html'), 'utf-8');
-    const emailAddress: string | undefined = process.env.emailAddress;
-
-    if(emailAddress === undefined) {
+    if(sourceEmailAddress === undefined || destinationEmailAddress === undefined) {
         throw new Error('Email address is undefined')
     }
 
     return {
-        Source: emailAddress,
+        Source: sourceEmailAddress,
         Destination: {
-            ToAddresses: [
-                emailAddress
-            ]
+            ToAddresses: [ destinationEmailAddress ]
         },
         Message: {
             Subject: {
@@ -30,7 +36,7 @@
                     Charset: "UTF-8"
                 },
                 Html: {
-                    Data: emailHtml,
+                    Data: template,
                     Charset: "UTF-8"
                 }
             }
@@ -38,71 +44,29 @@
     }
  }
 
- export function sendReminderDaily() {
-    const ses = new SES();
+ async function getData(): Promise<APODDto | string> {
+    const api_key: string | undefined = process.env.api_key;
 
-    ses.sendEmail(generateEmailParams(), (err: AWSError, data: SendEmailResponse) => {
+    try {
+        const res = await axios.get("https://api.nasa.gov/planetary/apod", {
+            params: {
+                api_key,
+            }
+        });
+        return res.data;
+      } catch {
+        console.log("inside catch");
+        return "this is not good, inner catch";
+      }
+ }
+
+ export async function sendReminderDaily(): Promise <void> {
+    const ses = new SES();
+    const APODData = await getData()
+    const emailTemplate = generateEmailParams(APODData)
+
+    ses.sendEmail(emailTemplate, (err: AWSError, data: SendEmailResponse) => {
         if (err) console.log(err, err.stack);
           else console.log(data);
       });
  }
- 
- 
- 
-
-
-
-
-
-
-
-
-
-// const AWS = require('aws-sdk');
-// import * as fs from 'fs';
-// import * as path from 'path';
-// //import html from '../templates/dailyReminder.html';
-// console.log('emailAddress', emailAddress)
-
-
-
-// export const sendReminderDaily = (callback) => {
-//     console.log("I'm in here")
-   
-//     AWS.config.update({region:'eu-west-2'});
-//     const ses = new AWS.SES();
-
-//     const emailHtml = fs.readFileSync(path.resolve(__dirname, '../templates/dailyReminder.html'), 'utf-8');
-// console.log("email: ", emailAddress, "dsds")
-//     const toAndFromAdress = ''
-//     const params = {
-//         Destination: {
-//             ToAddresses: [emailAddress]
-//         },
-//         Message: {
-//             Body: {
-//                 Html: {
-//                     Charset: "UTF-8", 
-//                     Data: emailHtml
-//                 }, 
-//                 Text: {
-//                     Charset: "UTF-8", 
-//                     Data: "Remember to continue helping the Woof Garden in your Pluralsight course!"
-//                 }
-//             }, 
-//             Subject: {
-//                 Charset: "UTF-8", 
-//                 Data: "Woof Garden Reminder"
-//             }
-//         },
-//         ReplyToAddresses: [emailAddress],
-//         Source: toAndFromAdress, 
-//     };
-
-//     ses.sendEmail(params, function(err, data) {
-//         // an error occurred
-//         if (err) console.log(err, err.stack); 
-//         // successful response
-//         else callback(null, data);
-//     }); 
-// };

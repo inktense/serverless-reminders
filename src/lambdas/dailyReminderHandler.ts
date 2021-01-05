@@ -1,10 +1,10 @@
-//import 'source-map-support/register';
+import { APIGatewayProxyHandler } from 'aws-lambda';
 import { sendReminderDaily } from '../services/dailyReminder';
 
-module.exports.sendDailyReminder = (_event, _context) => {
+export const sendDailyReminder: APIGatewayProxyHandler = async (_event, _context) => {
  // console.log('here>')
 
-  sendReminderDaily();
+  await sendReminderDaily();
 
   return {
     statusCode: 200,

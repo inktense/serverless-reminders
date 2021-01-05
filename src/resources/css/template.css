@@ -1,0 +1,23 @@
+body {
+  color: #464646;
+  font-size: 18px; }
+
+.panel-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: auto; }
+
+.panel-image {
+  flex: 2; }
+
+.panel-description {
+  flex: 2;
+  background-color: #373737;
+  color: #464646; }
+
+.title {
+  color: #FFF; }
+
+p {
+  color: orange; }

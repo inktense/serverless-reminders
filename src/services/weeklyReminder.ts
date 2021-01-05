@@ -1,11 +1,15 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import ejs from 'ejs';
 import { SES, AWSError } from 'aws-sdk';
 import { SendEmailRequest, SendEmailResponse } from 'aws-sdk/clients/ses';
 
 
 function generateEmailParams(): SendEmailRequest {
    const emailHtml = fs.readFileSync(path.resolve(__dirname, '../templates/dailyReminder.html'), 'utf-8');
+
+
+
    const emailAddress: string | undefined = process.env.emailAddress;
 
    if(emailAddress === undefined) {
